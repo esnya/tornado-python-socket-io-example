@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tornado-socket-io</title>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script>
+'use strict';
+
+const roomId = '/room01'
+
+const socket = io(`${location.origin}/?room_id=${roomId}`);
+
+socket.on('connect', () => {
+  console.log('connect', socket.id);
+});
+socket.on('disconnect', () => {
+  console.log('disconnect');
+});
+
+socket.on('current', room => {
+  console.log('current', room);
+});
+
+socket.on('update', room => {
+  console.log('update', room);
+});
+
+setTimeout(() => {
+  console.log('emit update');
+  socket.emit('update', {
+    data: 'this is updated room!',
+    other: 'data',
+    timestamp: new Date().toISOString(),
+  });
+}, 3 * 1000);
+  </script>
+</body>
+</html>
