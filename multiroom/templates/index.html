@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tornado-socket-io</title>
+</head>
+<body>
+  <div></div>
+  <select id="room-id">
+    <option value="/room01">/room01</option>
+    <option value="/room02">/room02</option>
+  </select>
+  <button id="enter">Enter</button>
+  <button id="leave">Leave</button>
+  <button id="update">Update</button>
+  <div id="log"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script>
+'use strict';
+
+// Definitions
+const roomIdSelect = document.querySelector('#room-id');
+const enterButton = document.querySelector('#enter');
+const leaveButton = document.querySelector('#leave');
+const updateButton = document.querySelector('#update');
+const logContainer = document.querySelector('#log');
+
+function putLog(...args) {
+  console.log(...args);
+
+  const pre = document.createElement('span');
+  pre.innerText = [
+    new Date().toISOString(),
+    ...args.map(arg => typeof arg === 'string' ? arg : JSON.stringify(arg, null, 2)),
+  ].join(' ');
+  logContainer.prepend(pre);
+}
+
+function getRoomId() {
+  const roomId = roomIdSelect.value;
+  if (!roomId) {
+    throw new TypeError();
+  }
+
+  return roomId;
+}
+
+// Initialize socket.io client
+const socket = io();
+
+socket.on('connect', () => {
+  putLog('connect', socket.id);
+});
+socket.on('disconnect', () => {
+  putLog('disconnect');
+});
+
+socket.on('current', room => {
+  putLog('current', room);
+});
+
+socket.on('update', room => {
+  putLog('update', room);
+});
+
+// DOM Events
+enterButton.addEventListener('click', () => {
+  socket.emit('enter', getRoomId());
+});
+
+leaveButton.addEventListener('click', () => {
+  socket.emit('leave', getRoomId());
+})
+
+updateButton.addEventListener('click', () => {
+  socket.emit('update', getRoomId(), {
+    data: 'this is updated room!',
+    other: 'data',
+    timestamp: new Date().toISOString(),
+  });
+});
+  </script>
+</body>
+</html>

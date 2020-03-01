@@ -1,7 +1,7 @@
 python-socketio/tornadoでroomを使うサンプル
 
 
-1. `python ./app.py`
+1. `python ./simple/app.py`
 2. `http://localhost:8888` を開く (A)
 3. `current` メッセージを受信 (A)
 4. `update` メッセージを送信 (A)
@@ -14,6 +14,7 @@ python-socketio/tornadoでroomを使うサンプル
 
 公式サンプル: https://github.com/miguelgrinberg/python-socketio/tree/master/examples/server/tornado
 
-* `app.py`: Tornado & `Socket.io`
-* `sio.py`: クエリ`room_id`で指定された`room`に`join`し、`update`や`Socket.io`イベント処理
-* `room.py`: `room`データ管理のスタブ
+* `simple/app.py`: Tornado & `Socket.io`
+* `simple/sio.py`: クエリ`room_id`で指定された`room`に`join`し、`update`や`Socket.io`イベント処理
+* `simple/room.py`: `room`データ管理のスタブ
+* `multiroom/`: 複数`room`のサンプル
